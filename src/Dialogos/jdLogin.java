@@ -22,23 +22,36 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import java.util.Calendar;
 import java.util.Date;
+import javax.persistence.*;
 
 /**
  *
  * @author David Alcaman
  */
 public class jdLogin extends javax.swing.JDialog {
-    int Logeado=0;   
+
+    private static final EntityManagerFactory emf;
+
+    static {
+        emf = Persistence.createEntityManagerFactory("MiPU"); // nombre de tu persistence-unit
+    }
+
+    public static EntityManager getEntityManager() {
+        return emf.createEntityManager();
+    }
+
+    int Logeado = 0;
+
     /**
      * Creates new form jdLogin
-     * 
+     *
      */
     public jdLogin(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         chbInternet.setVisible(false);
      //   chbInternet.setSelected(true);
-        
+
     }
 
     /**
@@ -163,75 +176,70 @@ public class jdLogin extends javax.swing.JDialog {
 
     private void btAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAceptarActionPerformed
         ResultSet Rs;
-        int i=0;
-        String q ="";
+        int i = 0;
+        String q = "";
         try {
             //String Nombre, String Usuario,String Clave, boolean Admin, boolean Ajuste, boolean Cobranza, boolean Transformacion, boolean AdminOCP){
-            fmMain.SetUsuario("", txUsuario.getText().trim() , txClave.getText(),chbInternet.isSelected(), false,false,false,false,false,false,false,0,0,0,0);
-                        
+            fmMain.SetUsuario("", txUsuario.getText().trim(), txClave.getText(), chbInternet.isSelected(), false, false, false, false, false, false, false, 0, 0, 0, 0);
+
 //            
             Conector Con = new Conector();
-            if(Con.getConnection() != null){
+            if (Con.getConnection() != null) {
                 ExeSql Sql = new ExeSql();
-                ExeSql Sql2 = new ExeSql();  
+                ExeSql Sql2 = new ExeSql();
                 System.out.println("Login Correcto");
                 //Rs = Sql.Select("select p.nombre,p.usuario,a.administrador,a.ajuste,a.cobranza,a.gastos,a.transformacion,a.adminocp,a.bodega,cc.ccosto,p.rut, u.admin_bodega\n" +
-                  Rs = Sql.Select("select p.nombre,p.usuario,a.administrador,a.ajuste,a.cobranza,a.gastos,\n" +
-                                  "a.transformacion,a.adminocp,a.bodega,cc.ccosto,p.rut,u.nivel,u.admin_bodega\n" +      //se agregó campo "nivel"        
-                                  "from personal p\n" +                                                                 //a la consulta SQL
-                                  "left join pacceso a on p.rut=a.rut \n" +
-                                  "left join personal_ccostos cc on p.rut=cc.rut\n" + 
-                                  "left join usuario u on u.usuario=p.usuario\n" + 
-                                  "where p.usuario='" + txUsuario.getText() + "'");
+                Rs = Sql.Select("select p.nombre,p.usuario,a.administrador,a.ajuste,a.cobranza,a.gastos,\n"
+                        + "a.transformacion,a.adminocp,a.bodega,cc.ccosto,p.rut,u.nivel,u.admin_bodega\n" + //se agregó campo "nivel"        
+                        "from personal p\n" + //a la consulta SQL
+                        "left join pacceso a on p.rut=a.rut \n"
+                        + "left join personal_ccostos cc on p.rut=cc.rut\n"
+                        + "left join usuario u on u.usuario=p.usuario\n"
+                        + "where p.usuario='" + txUsuario.getText() + "'");
                 Rs.next();
-                fmMain.SetUsuario( Rs.getString("nombre").trim(), 
-                                  Rs.getString("usuario"),
-                                  txClave.getText().trim(),
-                                  chbInternet.isSelected(),
-                                  Rs.getBoolean("Administrador"),
-                                  Rs.getBoolean("Ajuste"),
-                                  Rs.getBoolean("Cobranza"),
-                                  Rs.getBoolean("Gastos"),
-                                  Rs.getBoolean("transformacion"),
-                                  Rs.getBoolean("adminocp"),
-                                  Rs.getBoolean("bodega"),
-                                  Rs.getInt("ccosto"),
-                                  Rs.getInt("rut"), 
-                                  Rs.getInt("nivel"),   //Se agregó campo "nivel" como parámetro
-                                  Rs.getInt("admin_bodega") );
-                Logeado=1;
-                
+                fmMain.SetUsuario(Rs.getString("nombre").trim(),
+                        Rs.getString("usuario"),
+                        txClave.getText().trim(),
+                        chbInternet.isSelected(),
+                        Rs.getBoolean("Administrador"),
+                        Rs.getBoolean("Ajuste"),
+                        Rs.getBoolean("Cobranza"),
+                        Rs.getBoolean("Gastos"),
+                        Rs.getBoolean("transformacion"),
+                        Rs.getBoolean("adminocp"),
+                        Rs.getBoolean("bodega"),
+                        Rs.getInt("ccosto"),
+                        Rs.getInt("rut"),
+                        Rs.getInt("nivel"), //Se agregó campo "nivel" como parámetro
+                        Rs.getInt("admin_bodega"));
+                Logeado = 1;
+
                 //Sql2.ExeSql("update usuario set actualiza  =" + Logeado + " where usuario = '" +  txUsuario.getText().trim() + "';");
-                
-                q="update usuario set actualiza  =" + Logeado + ", fecha_actualiza = now() where usuario = '" +  txUsuario.getText().trim() + "';";
+                q = "update usuario set actualiza  =" + Logeado + ", fecha_actualiza = now() where usuario = '" + txUsuario.getText().trim() + "';";
                 Sql2.ExeSql(q);
 
-                 Rs = Sql.Select("Select nombre from par_general where tipo='ACTUALIZACION' and vigente=1 order by codigo");
-            
-                 String Novedades="<html><body>- ";
-                 
+                Rs = Sql.Select("Select nombre from par_general where tipo='ACTUALIZACION' and vigente=1 order by codigo");
+
+                String Novedades = "<html><body>- ";
+
 //                 for(i=0; i<20; i++){
 //                     espacios = espacios + " ";
 //                 }
-                 
-                 while (Rs.next())
-                 {
-                     Novedades = Novedades+Rs.getString("nombre")+"<br /> - ";
-                 }
-                 
-                 //int dif = 20-Novedades.length();
-                 Novedades = Novedades.substring(0,Novedades.length()-2) ;
-                 Novedades = Novedades+"</body></html>";
-                 dispose();
-            }
-            else{
-                if(Con.GetError().equals("Conexión rechazada"))
+                while (Rs.next()) {
+                    Novedades = Novedades + Rs.getString("nombre") + "<br /> - ";
+                }
+
+                //int dif = 20-Novedades.length();
+                Novedades = Novedades.substring(0, Novedades.length() - 2);
+                Novedades = Novedades + "</body></html>";
+                dispose();
+            } else {
+                if (Con.GetError().equals("Conexión rechazada")) {
                     fmMain.Mensaje("Error de Comunicación");
+                }
             }
 
             // Se actualiza el usuario que se ha logueado
-            
-            
 //            Rs = Sql.Select("select id,nombre, nivel from usuario\n" +
 //                        "where usuario='" + txUsuario.getText() + "'\n" +
 //                        "and clave='" + convertToSHA1(txClave.getText()) + "'");
@@ -244,77 +252,77 @@ public class jdLogin extends javax.swing.JDialog {
 //            }        
 //            else
 //                JOptionPane.showMessageDialog(null, "Datos incorrectos");
-            
         } catch (SQLException | HeadlessException e) {
-            
+
         }
 
-            
-            
 
     }//GEN-LAST:event_btAceptarActionPerformed
 
     private void txUsuarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txUsuarioKeyReleased
-         txUsuario.setText(txUsuario.getText().toUpperCase());
+        txUsuario.setText(txUsuario.getText().toUpperCase());
     }//GEN-LAST:event_txUsuarioKeyReleased
 
     private void txClaveKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txClaveKeyTyped
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btAceptar.doClick();
         }
     }//GEN-LAST:event_txClaveKeyTyped
 
     private void txUsuarioKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txUsuarioKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txClave.requestFocus();
         }
     }//GEN-LAST:event_txUsuarioKeyPressed
 
     private void txClaveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txClaveKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btAceptar.doClick();
-        }        
+        }
     }//GEN-LAST:event_txClaveKeyPressed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        if(Logeado==0) System.exit(0);
+        if (Logeado == 0) {
+            System.exit(0);
+        }
     }//GEN-LAST:event_formWindowClosed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       chbInternet.setVisible(!chbInternet.isVisible());
+        chbInternet.setVisible(!chbInternet.isVisible());
     }//GEN-LAST:event_jButton1ActionPerformed
-static public String convertToSHA1(String stringToHash) throws UnsupportedEncodingException{
-                try{
-                       
-                        MessageDigest md = MessageDigest.getInstance("SHA-1");
-                        byte[] sha1Hash = new byte[40];
-                        md.update(stringToHash.getBytes("iso-8859-1"),0, stringToHash.length());
-                        sha1Hash = md.digest();
-                        StringBuffer buf =  new StringBuffer();
-                        for(int i = 0; i < sha1Hash.length; i++){
-                                int halfbyte = (sha1Hash[i] >>> 4) & 0x0F;
-                                int two_halfs = 0;
-                                do{
-                                        if((0 <= halfbyte) && (halfbyte <=9)){
-                                                buf.append((char) ('0'+halfbyte));
-                                        }else{
-                                                buf.append((char)('a'+(halfbyte-10)));
-                                        }
-                                        halfbyte = sha1Hash[i] & 0x0F;
-                                }while(two_halfs++ < 1);
-                        }
-                        return buf.toString();
-                }catch(NoSuchAlgorithmException nsae){
-                        System.out.println("No se encontró el algoritmo");
-                        System.out.println("===========================");
-                        nsae.printStackTrace();
-                }catch(UnsupportedEncodingException uee){      
-                        System.out.println("Tipo de codificación no encontrado");
-                        System.out.println("===========================");
-                        uee.printStackTrace();
-                }
-                return "";
+    static public String convertToSHA1(String stringToHash) throws UnsupportedEncodingException {
+        try {
+
+            MessageDigest md = MessageDigest.getInstance("SHA-1");
+            byte[] sha1Hash = new byte[40];
+            md.update(stringToHash.getBytes("iso-8859-1"), 0, stringToHash.length());
+            sha1Hash = md.digest();
+            StringBuffer buf = new StringBuffer();
+            for (int i = 0; i < sha1Hash.length; i++) {
+                int halfbyte = (sha1Hash[i] >>> 4) & 0x0F;
+                int two_halfs = 0;
+                do {
+                    if ((0 <= halfbyte) && (halfbyte <= 9)) {
+                        buf.append((char) ('0' + halfbyte));
+                    } else {
+                        buf.append((char) ('a' + (halfbyte - 10)));
+                    }
+                    halfbyte = sha1Hash[i] & 0x0F;
+                } while (two_halfs++ < 1);
+            }
+            return buf.toString();
+        } catch (NoSuchAlgorithmException nsae) {
+            System.out.println("No se encontró el algoritmo");
+            System.out.println("===========================");
+            nsae.printStackTrace();
+        } catch (UnsupportedEncodingException uee) {
+            System.out.println("Tipo de codificación no encontrado");
+            System.out.println("===========================");
+            uee.printStackTrace();
         }
+        return "";
+    }
+
     /**
      * @param args the command line arguments
      */

@@ -1,0 +1,16 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" version="2.2">
+    <persistence-unit name="MiPU">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- Aquí registras todas tus entidades -->
+        <class>com.Entidades.Persona</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://192.168.0.150:5432/luvaly_des"/>
+            <property name="javax.persistence.jdbc.user" value="alopez"/>
+            <property name="javax.persistence.jdbc.password" value="78963"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+        </properties>
+    </persistence-unit>
+</persistence>

@@ -43,18 +43,17 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author Roberto López
  */
-
 public class fmMain extends javax.swing.JFrame {
-    static int[] PanEstado = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};//new int[10];
-    private static double Sys_IVA=0;
-    private static String Sys_Decimal=".";
-    private static String Sys_Miles =",";
-    private static int FacNewYear=0;
+
+    static int[] PanEstado = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};//new int[10];
+    private static double Sys_IVA = 0;
+    private static String Sys_Decimal = ".";
+    private static String Sys_Miles = ",";
+    private static int FacNewYear = 0;
     private static String UsuarioNombreReal;
     private static String UsuarioClave;
     private static String UsuarioNombre;
@@ -67,18 +66,18 @@ public class fmMain extends javax.swing.JFrame {
     private static boolean UsuarioBodega;
     private static int UsuarioCCosto;
     private static int UsuarioId;
-    private static boolean Internet; 
-    public static int disc =0;
+    private static boolean Internet;
+    public static int disc = 0;
     public int intNivelMnu = 0;
     public static int intNivelUsuario = 0;   //Variable nueva
-    public static int ccosto_usr =0;
-    public static int IntPosicionFinal =-1;
+    public static int ccosto_usr = 0;
+    public static int IntPosicionFinal = -1;
     private static int AdministraBodega;
     public static boolean cierra = false;
     public static boolean elimina = false;
-       
+
     public fmMain() {
-        
+
         initComponents();
         setTitle("SALA ERP");
         jdLogin Login = new jdLogin(null, true);
@@ -87,69 +86,56 @@ public class fmMain extends javax.swing.JFrame {
         CargaVariablesSistema();
         lbNombre.setText(UsuarioNombreReal);
         String Servidor = Conector.GetSistema();
-        
+
         jButton1.setVisible(false);
         jButton2.setVisible(false);  //Boton Actualizar
         jButton3.setVisible(false);  //Para realizar consultas, delete, update o insert 
         jButton4.setVisible(false);  //Para realizar consultas, delete, update o insert
         jButton5.setVisible(false);  //Para realizar consultas, delete, update o insert
-        
-        
+
         lblServidor.setText(Servidor);
-        
+
         try {
             setIconImage(new ImageIcon(getClass().getResource("/Iconos/Cash1.png")).getImage());
         } catch (Exception e) {
         }
-        
+
         muestraDatos();
-        
+
         System.out.println(GetUsuario());
-        
+
 //        setIconImage(new ImageIcon(getClass().getResource("../Iconos/L.png")).getImage());
 //        muestraDatos();
-        
-        if(fmMain.trae_nivel(fmMain.GetUsuario())<100){
-           
-           
+        if (fmMain.trae_nivel(fmMain.GetUsuario()) < 100) {
+
             jMenuItem77.setEnabled(false);
             jMenuItem80.setEnabled(false);
-           
-                    
+
             jButton2.setEnabled(false);
             jButton5.setEnabled(false);
 
-           
-           
-        
-        }else {
-            
-            
+        } else {
+
             jMenuItem77.setEnabled(true);
             jMenuItem80.setEnabled(true);
-          
-          
+
             jButton2.setEnabled(true);
-           
-           
-         
+
         }
-       
+
         AbrirCliente.setVisible(false);
-        
+
         jMenu1.setVisible(false);  //Configuracion
         jMenuItem40.setVisible(false);  //Reporte de Ventas
         jMenuItem41.setVisible(false);  //Reporte de Margen
-        
-        jMenu6.setVisible(false);  //Administracion
-        
-        jMenuItem77.setVisible(false); //Ajuste Inventario
-        
-        ajustePrecio.setVisible(false); //Ajuste precio
-        
-         
-    }
 
+        jMenu6.setVisible(false);  //Administracion
+
+        jMenuItem77.setVisible(false); //Ajuste Inventario
+
+        ajustePrecio.setVisible(false); //Ajuste precio
+
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -767,19 +753,17 @@ public class fmMain extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    public static void SetEstado(int Pos, int Estado){
-        PanEstado[Pos]=Estado;
+    public static void SetEstado(int Pos, int Estado) {
+        PanEstado[Pos] = Estado;
     }
 
+    public void muestraDatos() {
 
-    public void muestraDatos(){
-        
-        
         this.setExtendedState(MAXIMIZED_BOTH);
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario){
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            return;
         }
         lbTituloDocumentos.setVisible(true);
         buscaFactura();
@@ -787,387 +771,371 @@ public class fmMain extends javax.swing.JFrame {
         buscaFacturaExentaCliente();
         buscaGuiaDespachoCliente();
         buscaNotaCreditoCliente();
-       
-        
+
     }
-    
-    
-    
-    public void buscaFactura(){
+
+    public void buscaFactura() {
              //BUSCA CANTIDAD FACTURAS
-         
+
         ExeSql Sql = new ExeSql();
         ResultSet Rs;
-        int ContReg=0;
+        int ContReg = 0;
         String Query = "";
         lbFAC2.setText("");
         int almFAC = 0;
         try {
-                Query = "SELECT *, (hasta - numero ) AS ResultadoFAC FROM par_correlativo WHERE tipo = 'FAC'";      
-                Rs = Sql.Select(Query);
-                while (Rs.next()){
-                    ContReg ++;
-                    almFAC = Rs.getInt("ResultadoFAC");
-                    if(almFAC > 20){
-                    lbFAC2.setText("Facturas:                                    " +Rs.getString("ResultadoFAC"));
-                    lbFAC2.setForeground(Color.black); 
-                    }else{
-                    lbFAC2.setText("Facturas:                                    " +Rs.getString("ResultadoFAC"));
-                    lbFAC2.setForeground(Color.red); 
-                    }
-                }  
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null,"No se pueden encontrar datos");
-        }finally{
+            Query = "SELECT *, (hasta - numero ) AS ResultadoFAC FROM par_correlativo WHERE tipo = 'FAC'";
+            Rs = Sql.Select(Query);
+            while (Rs.next()) {
+                ContReg++;
+                almFAC = Rs.getInt("ResultadoFAC");
+                if (almFAC > 20) {
+                    lbFAC2.setText("Facturas:                                    " + Rs.getString("ResultadoFAC"));
+                    lbFAC2.setForeground(Color.black);
+                } else {
+                    lbFAC2.setText("Facturas:                                    " + Rs.getString("ResultadoFAC"));
+                    lbFAC2.setForeground(Color.red);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pueden encontrar datos");
+        } finally {
             Sql.Close();
         }
     }
-    
-    
-    public void buscaNotaDebito(){
+
+    public void buscaNotaDebito() {
      //BUSCA CANTIDAD NOTAS DE CREDITO
-        
+
         ExeSql SqlNDC = new ExeSql();
         ResultSet RsNDC;
-        int ContRegNDC=0;
+        int ContRegNDC = 0;
         String QueryNDC = "";
         lbNDC2.setText("");
         int almNDC = 0;
         try {
-                QueryNDC = "SELECT *, (hasta -numero) AS ResultadoNDC FROM par_correlativo WHERE tipo = 'NDC'";      
-                RsNDC = SqlNDC.Select(QueryNDC);
-                while (RsNDC.next()){
-                    ContRegNDC ++;
-                    almNDC = RsNDC.getInt("ResultadoNDC");
-                    if(almNDC > 20){
-                    lbNDC2.setText("Notas de Debito Cliente:         "+RsNDC.getString("ResultadoNDC"));
+            QueryNDC = "SELECT *, (hasta -numero) AS ResultadoNDC FROM par_correlativo WHERE tipo = 'NDC'";
+            RsNDC = SqlNDC.Select(QueryNDC);
+            while (RsNDC.next()) {
+                ContRegNDC++;
+                almNDC = RsNDC.getInt("ResultadoNDC");
+                if (almNDC > 20) {
+                    lbNDC2.setText("Notas de Debito Cliente:         " + RsNDC.getString("ResultadoNDC"));
                     lbNDC2.setForeground(Color.black);
-                    }else{
-                    lbNDC2.setText("Notas de Debito Cliente:         "+RsNDC.getString("ResultadoNDC")); 
+                } else {
+                    lbNDC2.setText("Notas de Debito Cliente:         " + RsNDC.getString("ResultadoNDC"));
                     lbNDC2.setForeground(Color.red);
-                    }
-                }  
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null,"No se pueden encontrar datos");
-        }finally{
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pueden encontrar datos");
+        } finally {
             SqlNDC.Close();
         }
     }
-    
-    public void buscaFacturaExentaCliente(){
+
+    public void buscaFacturaExentaCliente() {
     //BUSCA CANTIDAD FACTURA EXENTA CLIENTE
-        
+
         ExeSql SqlFEC = new ExeSql();
         ResultSet RsFEC;
-        int ContRegFEC=0;
+        int ContRegFEC = 0;
         String QueryFEC = "";
         lbFEC2.setText("");
         int almFEC = 0;
         try {
-                QueryFEC = "SELECT *, (hasta - numero ) AS ResultadoFEC FROM par_correlativo WHERE tipo = 'FEC'";      
-                RsFEC = SqlFEC.Select(QueryFEC);
-                while (RsFEC.next()){
-                    ContRegFEC ++;
-                    almFEC = RsFEC.getInt("ResultadoFEC");
-                    if(almFEC > 20){
-                        lbFEC2.setText("Facturas Exenta a Cliente:    "+RsFEC.getString("ResultadoFEC"));
-                        lbFEC2.setForeground(Color.black);
-                }else{
-                        lbFEC2.setText("Facturas Exenta a Cliente:    "+RsFEC.getString("ResultadoFEC"));
-                        lbFEC2.setForeground(Color.red);
-                    }
+            QueryFEC = "SELECT *, (hasta - numero ) AS ResultadoFEC FROM par_correlativo WHERE tipo = 'FEC'";
+            RsFEC = SqlFEC.Select(QueryFEC);
+            while (RsFEC.next()) {
+                ContRegFEC++;
+                almFEC = RsFEC.getInt("ResultadoFEC");
+                if (almFEC > 20) {
+                    lbFEC2.setText("Facturas Exenta a Cliente:    " + RsFEC.getString("ResultadoFEC"));
+                    lbFEC2.setForeground(Color.black);
+                } else {
+                    lbFEC2.setText("Facturas Exenta a Cliente:    " + RsFEC.getString("ResultadoFEC"));
+                    lbFEC2.setForeground(Color.red);
                 }
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null,"No se pueden encontrar datos");
-        }finally{
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pueden encontrar datos");
+        } finally {
             SqlFEC.Close();
         }
     }
 
-    public void buscaGuiaDespachoCliente(){
+    public void buscaGuiaDespachoCliente() {
   //BUSCA CANTIDAD GUIA DESPACHO CLIENTE
-        
+
         ExeSql SqlGDC = new ExeSql();
         ResultSet RsGDC;
-        int ContRegGDC=0;
+        int ContRegGDC = 0;
         String QueryGDC = "";
         lbGDC2.setText("");
         int almGDC = 0;
         try {
-                QueryGDC = "SELECT *, (hasta - numero ) AS ResultadoGDC FROM par_correlativo WHERE tipo = 'GDC'";      
-                RsGDC = SqlGDC.Select(QueryGDC);
-                while (RsGDC.next()){
-                    ContRegGDC ++;
-                    almGDC = RsGDC.getInt("ResultadoGDC");
-                    if(almGDC > 20){
-                        lbGDC2.setText("Guias de Despacho:                 "+RsGDC.getString("ResultadoGDC"));
-                        lbGDC2.setForeground(Color.black);
-                    }else{
-                        lbGDC2.setText("Guias de Despacho:                 "+RsGDC.getString("ResultadoGDC"));
-                        lbGDC2.setForeground(Color.red);
-                    }
-                }  
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null,"No se pueden encontrar datos");
-        }finally{
+            QueryGDC = "SELECT *, (hasta - numero ) AS ResultadoGDC FROM par_correlativo WHERE tipo = 'GDC'";
+            RsGDC = SqlGDC.Select(QueryGDC);
+            while (RsGDC.next()) {
+                ContRegGDC++;
+                almGDC = RsGDC.getInt("ResultadoGDC");
+                if (almGDC > 20) {
+                    lbGDC2.setText("Guias de Despacho:                 " + RsGDC.getString("ResultadoGDC"));
+                    lbGDC2.setForeground(Color.black);
+                } else {
+                    lbGDC2.setText("Guias de Despacho:                 " + RsGDC.getString("ResultadoGDC"));
+                    lbGDC2.setForeground(Color.red);
+                }
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pueden encontrar datos");
+        } finally {
             SqlGDC.Close();
         }
     }
 
-    public void buscaNotaCreditoCliente(){
+    public void buscaNotaCreditoCliente() {
       //BUSCA CANTIDAD NOTA DE CREDITO CLIENTE
-        
+
         ExeSql SqlNCC = new ExeSql();
         ResultSet RsNCC;
-        int ContRegNCC=0;
+        int ContRegNCC = 0;
         String QueryNCC = "";
         lbNCC2.setText("");
         int almNCC = 0;
         try {
-                QueryNCC = "SELECT *, (hasta - numero ) AS ResultadoNCC FROM par_correlativo WHERE tipo = 'NCC'";      
-                RsNCC = SqlNCC.Select(QueryNCC);
-                while (RsNCC.next()){
-                    ContRegNCC ++;
-                    almNCC = RsNCC.getInt("ResultadoNCC");
-                    if(almNCC > 20){
-                        lbNCC2.setText("Notas de Credito Cliente:       "+RsNCC.getString("ResultadoNCC"));
-                        lbNCC2.setForeground(Color.black);
-                    }else{
-                        lbNCC2.setText("Notas de Credito Cliente:       "+RsNCC.getString("ResultadoNCC"));
-                        lbNCC2.setForeground(Color.red);
-                    }
+            QueryNCC = "SELECT *, (hasta - numero ) AS ResultadoNCC FROM par_correlativo WHERE tipo = 'NCC'";
+            RsNCC = SqlNCC.Select(QueryNCC);
+            while (RsNCC.next()) {
+                ContRegNCC++;
+                almNCC = RsNCC.getInt("ResultadoNCC");
+                if (almNCC > 20) {
+                    lbNCC2.setText("Notas de Credito Cliente:       " + RsNCC.getString("ResultadoNCC"));
+                    lbNCC2.setForeground(Color.black);
+                } else {
+                    lbNCC2.setText("Notas de Credito Cliente:       " + RsNCC.getString("ResultadoNCC"));
+                    lbNCC2.setForeground(Color.red);
                 }
-        }catch(SQLException ex){
-            JOptionPane.showMessageDialog(null,"No se pueden encontrar datos");
-        }finally{
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "No se pueden encontrar datos");
+        } finally {
             SqlNCC.Close();
         }
     }
 
-    
-    
-    
-    
-    
+    public static void SetUsuario(String Nombre,
+            String Usuario,
+            String Clave,
+            boolean EsInternet,
+            boolean Admin,
+            boolean Ajuste,
+            boolean Cobranza,
+            boolean Gastos,
+            boolean Transformacion,
+            boolean AdminOCP,
+            boolean Bodega,
+            int CCosto,
+            int Id,
+            int Nivel, //Variabel Nueva
+            int AdminBodega) {
+        UsuarioNombreReal = Nombre;
+        UsuarioNombre = Usuario;
+        UsuarioClave = Clave;
 
-    public static void SetUsuario(String Nombre, 
-                                String Usuario,
-                                String Clave,
-                                boolean EsInternet, 
-                                boolean Admin, 
-                                boolean Ajuste, 
-                                boolean Cobranza, 
-                                boolean Gastos, 
-                                boolean Transformacion,
-                                boolean AdminOCP,
-                                boolean Bodega,
-                                int CCosto, 
-                                int Id, 
-                                int Nivel,              //Variabel Nueva
-                                int AdminBodega){
-        UsuarioNombreReal     = Nombre;
-        UsuarioNombre         = Usuario;
-        UsuarioClave          = Clave;
-    
+        UsuarioAdministrador = Admin;
+        UsuarioAjuste = Ajuste;
+        UsuarioCobranza = Cobranza;
+        UsuarioTransforma = Transformacion;
+        UsuarioAtorizaOCP = AdminOCP;
+        UsuarioGastos = Gastos;
+        UsuarioBodega = Bodega;
+        AdministraBodega = AdminBodega;
 
-        UsuarioAdministrador    = Admin;
-        UsuarioAjuste           = Ajuste;
-        UsuarioCobranza         = Cobranza;
-        UsuarioTransforma       = Transformacion;
-        UsuarioAtorizaOCP       = AdminOCP;
-        UsuarioGastos           = Gastos;
-        UsuarioBodega           = Bodega;
-        AdministraBodega        = AdminBodega;
-    
-        UsuarioCCosto           = CCosto;
-        UsuarioId               = Id;
-        intNivelUsuario         = Nivel;      //Codigo nuevo
-        Internet                = EsInternet;
-    
+        UsuarioCCosto = CCosto;
+        UsuarioId = Id;
+        intNivelUsuario = Nivel;      //Codigo nuevo
+        Internet = EsInternet;
+
     }
-    
-    public static void SetNombreUsuario(String ElNombre){
-    
+
+    public static void SetNombreUsuario(String ElNombre) {
+
         UsuarioNombre = ElNombre;
     }
 
-
-    public static int GetFacNewYear(){
+    public static int GetFacNewYear() {
         ResultSet Rs;
         ExeSql Sql = new ExeSql();
         try {
-            Rs= Sql.Select("select fac_newyear from parsys");
+            Rs = Sql.Select("select fac_newyear from parsys");
             Rs.next();
             return Rs.getInt("fac_newyear");
         } catch (Exception e) {
             return 0;
-        }finally{
+        } finally {
             Sql.Close();
         }
     }
 
-    public static String BodegaTransito(){
+    public static String BodegaTransito() {
         return "SAL.1001.1";
     }
-    
-    
-    public static String Rack1(){
+
+    public static String Rack1() {
         return "SAL.101.1";
     }
-    
-    
-    public static String BodegaTransformacion(){
+
+    public static String BodegaTransformacion() {
         return "TRAN.1005.1";
     }
 
-    public static String BodegaNCC(){
+    public static String BodegaNCC() {
         return "TRAN.1004.1";
     }
-       
-    public static String BodegaOCDirecta(){
+
+    public static String BodegaOCDirecta() {
         return "TRAN.1003.1";
     }
 
-    public static String BodegaNCP(){
+    public static String BodegaNCP() {
         return "TRAN.1002.1";
     }
 
-    public static String BodegaAnticipada(){
+    public static String BodegaAnticipada() {
         return "TRAN.1007.1";
     }
-    
-    public static String BodegaNegativos(){
+
+    public static String BodegaNegativos() {
         return "INV.1011.2";
     }
-    
-    public static String BodegaPositivos(){
+
+    public static String BodegaPositivos() {
         return "INV.1011.1";
     }
 
-
-    public static void ErrorUsuarioLog(String Usuario,String Error){
+    public static void ErrorUsuarioLog(String Usuario, String Error) {
         ExeSql Sql = new ExeSql();
-    
+
         try {
-            Sql.ExeSql("insert into usuarios_eventos (usuario,tipo)values \n" + 
-                     "('" + Usuario + "','" + Error + "')");
+            Sql.ExeSql("insert into usuarios_eventos (usuario,tipo)values \n"
+                    + "('" + Usuario + "','" + Error + "')");
             Sql.Commit();
-        
-        }catch (Exception e) {
-            
+
+        } catch (Exception e) {
+
             Sql.Rollback();
-        }finally {
+        } finally {
             Sql.Close();
         }
     }
 
-    public static boolean GetInternet(){
+    public static boolean GetInternet() {
         return Internet;
     }
-    
-    public static int GetAdminBodega(){
+
+    public static int GetAdminBodega() {
         return AdministraBodega;
     }
-    
-    public static String GetUsuario(){
+
+    public static String GetUsuario() {
         return UsuarioNombre;
     }
-    
-    public static String GetPass(){
+
+    public static String GetPass() {
         return UsuarioClave;
     }
 
-    public static int GetEstado(int Pos){
+    public static int GetEstado(int Pos) {
         return PanEstado[Pos];
     }
-    
-    public static void DeleteEstado(int Pos){
-    
-        for(int i=Pos ; i<= 12 ; i++) {
-            PanEstado[i]=PanEstado[i+1];
+
+    public static void DeleteEstado(int Pos) {
+
+        for (int i = Pos; i <= 12; i++) {
+            PanEstado[i] = PanEstado[i + 1];
         }
     }
-    
-    public static String GetDecimal(){
-    
+
+    public static String GetDecimal() {
+
         return Sys_Decimal;
     }
 
-    public static String GetMiles(){
+    public static String GetMiles() {
         return Sys_Miles;
     }
 
-    public static double GetIva(){
+    public static double GetIva() {
         return Sys_IVA;
     }
-    
-    public static boolean GetUsuarioAdministrador(){
+
+    public static boolean GetUsuarioAdministrador() {
         return UsuarioAdministrador;
     }
-    
-    public static boolean GetUsuarioCobranza(){
+
+    public static boolean GetUsuarioCobranza() {
         return UsuarioCobranza;
     }
-    
-    public static boolean GetUsuarioAjuste(){
+
+    public static boolean GetUsuarioAjuste() {
         return UsuarioAjuste;
     }
 
-    public static boolean GetUsuarioTransforma(){
+    public static boolean GetUsuarioTransforma() {
         return UsuarioTransforma;
     }
-    
-    public static boolean GetUsuarioAdminOCP(){
+
+    public static boolean GetUsuarioAdminOCP() {
         return UsuarioAtorizaOCP;
     }
 
-    public static boolean GetUsuarioBodega(){
+    public static boolean GetUsuarioBodega() {
         return UsuarioBodega;
     }
 
-    public static boolean GetUsuarioGastos(){
+    public static boolean GetUsuarioGastos() {
         return UsuarioGastos;
     }
-    
-    public static String GetCentrodeCosto(){
+
+    public static String GetCentrodeCosto() {
         return String.valueOf(UsuarioCCosto);
     }
 
-    public static String GetUsuarioId(){
+    public static String GetUsuarioId() {
         return String.valueOf(UsuarioId);
     }
 
-    public static String GetStringDeFinal(char cara , String nombrePalabra ){
- 
-        int j;   
-        j=0;
-        
-        for(int i=nombrePalabra.length()-1; i >0 ; i-- ){
-        
-            if( nombrePalabra.charAt(i)== cara){
-              j=i;
-              break;
-            } 
-       }   
-       return nombrePalabra.substring(j+1).trim();
-   }
+    public static String GetStringDeFinal(char cara, String nombrePalabra) {
 
-    public static String GetStringDeInicio(char cara , String nombrePalabra ){
- 
-        int j;   
-        j=0;
-        
-        for(int i=0; i <=nombrePalabra.length() ; i++ ){
-            
-            if( nombrePalabra.charAt(i)== cara){
-                j=i;
+        int j;
+        j = 0;
+
+        for (int i = nombrePalabra.length() - 1; i > 0; i--) {
+
+            if (nombrePalabra.charAt(i) == cara) {
+                j = i;
                 break;
             }
-        }   
-     
-        return nombrePalabra.substring(j+1).trim();
+        }
+        return nombrePalabra.substring(j + 1).trim();
     }
 
+    public static String GetStringDeInicio(char cara, String nombrePalabra) {
+
+        int j;
+        j = 0;
+
+        for (int i = 0; i <= nombrePalabra.length(); i++) {
+
+            if (nombrePalabra.charAt(i) == cara) {
+                j = i;
+                break;
+            }
+        }
+
+        return nombrePalabra.substring(j + 1).trim();
+    }
 
     public static boolean validarRut(String rut) {
         boolean validacion = false;
@@ -1183,7 +1151,7 @@ public class fmMain extends javax.swing.JFrame {
                 s = (s + rutAux % 10 * (9 - m++ % 6)) % 11;
             }
             if (dvx == (char) (s != 0 ? s + 47 : 75)) {
-               validacion = true;
+                validacion = true;
             }
             //fmMain.Mensaje("EL DV ES :" + (s - 1));
         } catch (java.lang.NumberFormatException e) {
@@ -1192,264 +1160,266 @@ public class fmMain extends javax.swing.JFrame {
         return validacion;
     }
 
-    public static String FormatoNumeroBig(BigInteger Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+    public static String FormatoNumeroBig(BigInteger Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("###,##0",simbolo);
-        return formateador.format(Numero);
-    }
-    
-    
-    public static String FormatoNumeroInt(Integer Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
-        simbolo.setDecimalSeparator('.');
-        simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("###,##0",simbolo);
+        DecimalFormat formateador = new DecimalFormat("###,##0", simbolo);
         return formateador.format(Numero);
     }
 
-    public static String FormatoNumeroBigLimpio(BigInteger Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+    public static String FormatoNumeroInt(Integer Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("#0",simbolo);
+        DecimalFormat formateador = new DecimalFormat("###,##0", simbolo);
         return formateador.format(Numero);
     }
 
-    public static String FormatoNumero(double Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+    public static String FormatoNumeroBigLimpio(BigInteger Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("###,##0.00",simbolo);
+        DecimalFormat formateador = new DecimalFormat("#0", simbolo);
         return formateador.format(Numero);
     }
 
-    public static String FormatoNumeroSinDecimal(double Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+    public static String FormatoNumero(double Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("###,##0",simbolo);
+        DecimalFormat formateador = new DecimalFormat("###,##0.00", simbolo);
         return formateador.format(Numero);
     }
 
-    public static String FormatoTotal(double Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+    public static String FormatoNumeroSinDecimal(double Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("###,###",simbolo);
+        DecimalFormat formateador = new DecimalFormat("###,##0", simbolo);
         return formateador.format(Numero);
     }
 
-    public static String SetGuardar(String Numero){
-        String Retorno=Numero.replace(",", "");
-        Retorno=Retorno.replace(",", "");
-        Retorno=Retorno.replace("$", "");
-        Retorno=Retorno.replace("'","");
-    
-        Retorno = EliminaCaracteres(Retorno,",");
-    
+    public static String FormatoTotal(double Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
+        simbolo.setDecimalSeparator('.');
+        simbolo.setGroupingSeparator(',');
+        DecimalFormat formateador = new DecimalFormat("###,###", simbolo);
+        return formateador.format(Numero);
+    }
+
+    public static String SetGuardar(String Numero) {
+        String Retorno = Numero.replace(",", "");
+        Retorno = Retorno.replace(",", "");
+        Retorno = Retorno.replace("$", "");
+        Retorno = Retorno.replace("'", "");
+
+        Retorno = EliminaCaracteres(Retorno, ",");
+
         return Retorno;
     }
 
-    public static void Msje (String Titulo, String Mensaje, int xx , int yy){
-        JOptionPane pane = new JOptionPane(Mensaje);  
-        JDialog dialog = pane.createDialog(Titulo);  
-        dialog.setLocation(xx, yy);  
-        dialog.setVisible(true);  
+    public static void Msje(String Titulo, String Mensaje, int xx, int yy) {
+        JOptionPane pane = new JOptionPane(Mensaje);
+        JDialog dialog = pane.createDialog(Titulo);
+        dialog.setLocation(xx, yy);
+        dialog.setVisible(true);
     }
 
+    public static String SetGuardarEntero(String Numero) {
+        String Retorno = Numero.replace(",", "");
 
-    public static String SetGuardarEntero(String Numero){
-        String Retorno=Numero.replace(",", "");
-    
-        Retorno=Retorno.replace(",", "");
-        Retorno=Retorno.replace("$", "");
-        Retorno=Retorno.replace(".", "");
-        Retorno=Retorno.replace("$", "");
-    
-        Retorno = EliminaCaracteres(Retorno,",");
-    
+        Retorno = Retorno.replace(",", "");
+        Retorno = Retorno.replace("$", "");
+        Retorno = Retorno.replace(".", "");
+        Retorno = Retorno.replace("$", "");
+
+        Retorno = EliminaCaracteres(Retorno, ",");
+
         return Retorno;
     }
-    public static String EliminaCaracteres(String s_cadena, String s_caracteres){
-  
+
+    public static String EliminaCaracteres(String s_cadena, String s_caracteres) {
+
         String nueva_cadena = "";
         Character caracter = null;
         boolean valido = true;
- 
-  /* Va recorriendo la cadena s_cadena y copia a la cadena que va a regresar,
-     sólo los caracteres que no estén en la cadena s_caracteres */
-        for (int i=0; i<s_cadena.length(); i++){
-       
+
+        /* Va recorriendo la cadena s_cadena y copia a la cadena que va a regresar,
+         sólo los caracteres que no estén en la cadena s_caracteres */
+        for (int i = 0; i < s_cadena.length(); i++) {
+
             valido = true;
-            
-            for (int j=0; j<s_caracteres.length(); j++){
-            
+
+            for (int j = 0; j < s_caracteres.length(); j++) {
+
                 caracter = s_caracteres.charAt(j);
- 
-                if (s_cadena.charAt(i) == caracter){
-                
+
+                if (s_cadena.charAt(i) == caracter) {
+
                     valido = false;
                     break;
-               }
-           }
-           if (valido)
-               nueva_cadena += s_cadena.charAt(i);
+                }
+            }
+            if (valido) {
+                nueva_cadena += s_cadena.charAt(i);
+            }
         }
- 
+
         return nueva_cadena;
     }
-    
-    public static boolean EsLetra(java.awt.event.KeyEvent evt){
-        if(evt.getKeyCode() > KeyEvent.VK_A && evt.getKeyCode() < KeyEvent.VK_Z || evt.getKeyChar()=='ñ')
+
+    public static boolean EsLetra(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode() > KeyEvent.VK_A && evt.getKeyCode() < KeyEvent.VK_Z || evt.getKeyChar() == 'ñ') {
             return true;
-        else
+        } else {
             return false;
-    }
-    public static String SetString(String Texto){
-    
-        if(Texto.isEmpty() || Texto.trim().equals(""))
-            return "null";
-        else
-            return "'" + Texto.trim() +"'";
+        }
     }
 
-    public static void LimpiaGrilla(DefaultTableModel dfTm){
-        while(dfTm.getRowCount()>0)
-            dfTm.removeRow(0);
+    public static String SetString(String Texto) {
+
+        if (Texto.isEmpty() || Texto.trim().equals("")) {
+            return "null";
+        } else {
+            return "'" + Texto.trim() + "'";
+        }
     }
-    public static int OkCancel(String Mensaje){
-        
-        int result = JOptionPane.showConfirmDialog(null, Mensaje,"Confirmar", JOptionPane.OK_CANCEL_OPTION);
+
+    public static void LimpiaGrilla(DefaultTableModel dfTm) {
+        while (dfTm.getRowCount() > 0) {
+            dfTm.removeRow(0);
+        }
+    }
+
+    public static int OkCancel(String Mensaje) {
+
+        int result = JOptionPane.showConfirmDialog(null, Mensaje, "Confirmar", JOptionPane.OK_CANCEL_OPTION);
         return result;
     }
 
-    public static void Mensaje(String Mensaje){
+    public static void Mensaje(String Mensaje) {
         int Pos = 0;
-        
-        if(Mensaje != null){
-            
-            Pos=Mensaje.indexOf("Where");
-        
-            if(Pos>0){
-        
-               System.out.println(Mensaje);
+
+        if (Mensaje != null) {
+
+            Pos = Mensaje.indexOf("Where");
+
+            if (Pos > 0) {
+
+                System.out.println(Mensaje);
                 Mensaje = Mensaje.substring(0, Pos);
             }
             JOptionPane.showMessageDialog(null, Mensaje);
         }
-        
+
     }
 
-    private void CargaVariablesSistema(){
-        
-        ExeSql  Sql = new ExeSql();
+    private void CargaVariablesSistema() {
+
+        ExeSql Sql = new ExeSql();
         try {
-            ResultSet Rs= Sql.Select("select iva,decimal,fac_newyear from parsys");
+            ResultSet Rs = Sql.Select("select iva,decimal,fac_newyear from parsys");
             Rs.next();
-            Sys_IVA = Rs.getFloat("iva")/100;
+            Sys_IVA = Rs.getFloat("iva") / 100;
             Sys_Decimal = Rs.getString("decimal");
             FacNewYear = Rs.getInt("fac_newyear");
-        }catch (Exception e) {
-         
+        } catch (Exception e) {
+
             JOptionPane.showMessageDialog(null, "Carga Variables " + e);
-        } finally{
+        } finally {
             Sql.Close();
         }
-    
+
     }
 
+    public static int trae_nivel(String Usu) {
 
-
-    public static int  trae_nivel(String Usu){
-        
         ExeSql Sql = new ExeSql();
         ResultSet Rs;
-        String Ubica="", Query="";
-        int i =0;
-        int Salida=0;
+        String Ubica = "", Query = "";
+        int i = 0;
+        int Salida = 0;
         try {
-                
-                Query = "SELECT u.usuario,p.rut,cc.ccosto ccosto_pcc, u.nivel\n" +
-                        "FROM personal p\n" +
-                        "left join pacceso a on p.rut=a.rut \n" +
-                        "left join personal_ccostos cc on p.rut=cc.rut\n" +
-                        "left join usuario u on u.usuario = p.usuario\n" +
-                        "WHERE u.usuario ='" + Usu.trim() +"'";
-                
-                Rs = Sql.Select(Query );
 
-                if(Sql.GetRowCount()==0){  
-                
-                    Toolkit.getDefaultToolkit().beep();  
-                    fmMain.Mensaje("No existe Usuario" );
-                    Salida= 0;
-                }      
+            Query = "SELECT u.usuario,p.rut,cc.ccosto ccosto_pcc, u.nivel\n"
+                    + "FROM personal p\n"
+                    + "left join pacceso a on p.rut=a.rut \n"
+                    + "left join personal_ccostos cc on p.rut=cc.rut\n"
+                    + "left join usuario u on u.usuario = p.usuario\n"
+                    + "WHERE u.usuario ='" + Usu.trim() + "'";
 
-                if (Rs.next()){
-                
-                    Salida= Rs.getInt("nivel");
-                    ccosto_usr = Rs.getInt("ccosto_pcc");
-                }
-                        
-        }catch (Exception e) {
-         
+            Rs = Sql.Select(Query);
+
+            if (Sql.GetRowCount() == 0) {
+
+                Toolkit.getDefaultToolkit().beep();
+                fmMain.Mensaje("No existe Usuario");
+                Salida = 0;
+            }
+
+            if (Rs.next()) {
+
+                Salida = Rs.getInt("nivel");
+                ccosto_usr = Rs.getInt("ccosto_pcc");
+            }
+
+        } catch (Exception e) {
+
             System.out.println(e.getMessage());
-        
-        }finally{
-        
+
+        } finally {
+
             Sql.Close();
         } //Finally        
-    
+
         return Salida;
     }
 
-    public void PestanaProducto(String Codigo){
+    public void PestanaProducto(String Codigo) {
         pfProductos Pro = new pfProductos();
         //Pro.setOpaque(false);
-        
+
         pnPestanas.addTab("Nuevo Producto", Pro);
-        
-        PanelTab btc=new PanelTab(pnPestanas,0);
+
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         btc.setBorder(null);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Pro), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
-        
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
+
         Pro.txSku.requestFocus();
-        if(!Codigo.isEmpty()){
+        if (!Codigo.isEmpty()) {
             Pro.CargaProducto(Codigo);
         }
     }
 //-----------------------------------------------------------------------------
     private void AbrirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirClienteActionPerformed
-        
+
       //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=5 && ccosto_usr!=3 ) ) && (intNivelUsuario<=80)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || (ccosto_usr != 5 && ccosto_usr != 3)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------   
-        
+
         pfClientes Cli = new pfClientes();
 //        Cli.setOpaque(false);
         pnPestanas.addTab("Nuevo Cliente", Cli);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Cli), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_AbrirClienteActionPerformed
 
     private void AbrirProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirProveedorActionPerformed
@@ -1457,29 +1427,28 @@ public class fmMain extends javax.swing.JFrame {
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------        
-        
+
         pfProveedores Prv = new pfProveedores();
 //        Prv.setOpaque(false);
         pnPestanas.addTab("Nuevo Proveedor", Prv);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Prv), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
         Prv.txRut.requestFocus();
     }//GEN-LAST:event_AbrirProveedorActionPerformed
 
@@ -1487,95 +1456,92 @@ public class fmMain extends javax.swing.JFrame {
       //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area    = 90
-             Supervisores  = 80
-             Normal        = 70
-             Normal Vtas   = 71
-             Visita        = 60
+         Administrador = 100
+         Admin Area    = 90
+         Supervisores  = 80
+         Normal        = 70
+         Normal Vtas   = 71
+         Visita        = 60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
+
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=5) ) && (intNivelUsuario<=80)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || (ccosto_usr != 5)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------        
-        
-        
-        
-            jdBuscarCliPrv BPC = new jdBuscarCliPrv(this, true);
-            BPC.setLocationRelativeTo(null);
-            BPC.setDefaultCloseOperation(BPC.DISPOSE_ON_CLOSE);
-            BPC.setTitle("Buscar Cliente");
-            BPC.SetTipo(0);
-            BPC.setVisible(true);
-          
-        
+
+        jdBuscarCliPrv BPC = new jdBuscarCliPrv(this, true);
+        BPC.setLocationRelativeTo(null);
+        BPC.setDefaultCloseOperation(BPC.DISPOSE_ON_CLOSE);
+        BPC.setTitle("Buscar Cliente");
+        BPC.SetTipo(0);
+        BPC.setVisible(true);
+
+
     }//GEN-LAST:event_BuscarClienteActionPerformed
 
     private void OCPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OCPActionPerformed
-    
+
           //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area    = 90
-             Supervisores  = 80
-             Normal        =  70
-             Normal Vtas   =  71
-             Visita        = 60
+         Administrador = 100
+         Admin Area    = 90
+         Supervisores  = 80
+         Normal        =  70
+         Normal Vtas   =  71
+         Visita        = 60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------        
-        
+
         pfNPProveedor PrvNP = new pfNPProveedor();
 //        PrvOC.setOpaque(false);
         pnPestanas.addTab("Nota de Pedido         ", PrvNP);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(PrvNP), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
-        
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
+
     }//GEN-LAST:event_OCPActionPerformed
 
     private void mnuControlInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlInventarioActionPerformed
    //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area    = 90
-             Supervisores  = 80
-             Normal        = 70
-             Normal Vtas   = 71
-             Visita        = 60
+         Administrador = 100
+         Admin Area    = 90
+         Supervisores  = 80
+         Normal        = 70
+         Normal Vtas   = 71
+         Visita        = 60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
+
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        
-        if (intNivelMnu > intNivelUsuario ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
+
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
     //--------------------------------------------------------------------------------------        
-        
+
         pfControlStock ControlStock = new pfControlStock();
         pnPestanas.addTab("Control de Stock", ControlStock);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(ControlStock), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
-        
-        
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
+
+
     }//GEN-LAST:event_mnuControlInventarioActionPerformed
 
     private void mnuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuUsuariosActionPerformed
@@ -1583,71 +1549,69 @@ public class fmMain extends javax.swing.JFrame {
 //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area    = 90
-             Supervisores  = 80
-             Normal        = 70
-             Normal Vtas   = 71
-             Visita        = 60
+         Administrador = 100
+         Admin Area    = 90
+         Supervisores  = 80
+         Normal        = 70
+         Normal Vtas   = 71
+         Visita        = 60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=4) ) && (intNivelUsuario<100)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || (ccosto_usr != 4)) && (intNivelUsuario < 100)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------           
-        
-        
+
         pfUsuarios Usuarios = new pfUsuarios();
 //        Usuarios.setOpaque(false);
         pnPestanas.addTab("Configuración Usuarios", Usuarios);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Usuarios), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_mnuUsuariosActionPerformed
 
     private void ReporteOCPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReporteOCPActionPerformed
           //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
+
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
-    //--------------------------------------------------------------------------------------        
+        //--------------------------------------------------------------------------------------        
         pfOCPReporte repOCP = new pfOCPReporte();
 //        repOCP.setOpaque(false);
         pnPestanas.addTab("ORDENES DE COMPRA PROVEEDOR", repOCP);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(repOCP), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_ReporteOCPActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         System.exit(1);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-    
+
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
-        jdCambioClave Clave = new jdCambioClave(this,true);
+        jdCambioClave Clave = new jdCambioClave(this, true);
         Clave.setLocationRelativeTo(null);
         Clave.setDefaultCloseOperation(Clave.DISPOSE_ON_CLOSE);
         Clave.setTitle("Cambiar Mi Clave");
         Clave.setVisible(true);
-    // TODO add your handling code here:
+        // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
@@ -1655,32 +1619,29 @@ public class fmMain extends javax.swing.JFrame {
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=4) ) && (intNivelUsuario<=80)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || (ccosto_usr != 4)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------           
-            
-        
-        
+
 //if(GetUsuarioAdministrador()){
-            pfAdminParametros Admin = new pfAdminParametros();
+        pfAdminParametros Admin = new pfAdminParametros();
 //            Admin.setOpaque(false);
-            pnPestanas.addTab("Parametros", Admin);
-            PanelTab btc=new PanelTab(pnPestanas,0);
-            pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Admin), btc);
-            pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.addTab("Parametros", Admin);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
+        pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Admin), btc);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
 //        }    
 //        else{
 //            Mensaje("Usuario no autorizado");
@@ -1692,63 +1653,58 @@ public class fmMain extends javax.swing.JFrame {
 	//--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 80;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
 //         if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=7) ) && (intNivelUsuario<=80)){
-        if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=7) ) && (intNivelUsuario<100)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || (ccosto_usr != 7)) && (intNivelUsuario < 100)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------   
-        
+
         pfAjusteStock AJU = new pfAjusteStock();
         //            AJU.setOpaque(false);
         pnPestanas.addTab("AJUSTE", AJU);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(AJU), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_AjustedeStockActionPerformed
-    private void AbrirProductoActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        
+    private void AbrirProductoActionPerformed(java.awt.event.ActionEvent evt) {
+
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        
-        
-        
-        
-        if (intNivelMnu > intNivelUsuario ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------
-        
-        
+
         pfProductos Pro = new pfProductos();
         pnPestanas.addTab("Ficha Producto", Pro);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Pro), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
         Pro.txSku.requestFocus();
-    }  
+    }
 //GEN-FIRST:event_AbrirProductoActionPerformed
 //GEN-LAST:event_AbrirProductoActionPerformed
 
@@ -1756,28 +1712,27 @@ public class fmMain extends javax.swing.JFrame {
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------
-        
-        
+
         pfNCCCliente NCC = new pfNCCCliente();
         //        NCC.setOpaque(false);
         pnPestanas.addTab("NOTA DE CRÉDITO", NCC);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(NCC), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_NCCActionPerformed
 
     private void jMenuItem40ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem40ActionPerformed
@@ -1785,31 +1740,28 @@ public class fmMain extends javax.swing.JFrame {
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------
 
-        
-        
-        
         //if(GetUsuarioAdministrador()){
-            pfReporteVentasFinal RepoVenta = new pfReporteVentasFinal();
-            pnPestanas.addTab("Reporte de Ventas", RepoVenta);
-            PanelTab btc=new PanelTab(pnPestanas,0);
-            pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(RepoVenta), btc);
-            pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
-            
+        pfReporteVentasFinal RepoVenta = new pfReporteVentasFinal();
+        pnPestanas.addTab("Reporte de Ventas", RepoVenta);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
+        pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(RepoVenta), btc);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
+
 //        }    
 //        else{
 //            Mensaje("Usuario no autorizado");
@@ -1817,33 +1769,31 @@ public class fmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem40ActionPerformed
 
     private void jMenuItem41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem41ActionPerformed
-        
+
     //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------
-        
-        
-        
+
 //        if(GetUsuarioAdministrador()){
-            pfReportesMargen RepoMargen = new pfReportesMargen();
-            pnPestanas.addTab("Reporte de Margen", RepoMargen);
-            PanelTab btc=new PanelTab(pnPestanas,0);
-            pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(RepoMargen), btc);
-            pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pfReportesMargen RepoMargen = new pfReportesMargen();
+        pnPestanas.addTab("Reporte de Margen", RepoMargen);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
+        pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(RepoMargen), btc);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
 //        }    
 //        else{
 //            Mensaje("Usuario no autorizado");
@@ -1851,89 +1801,88 @@ public class fmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem41ActionPerformed
 
     private void jMenuItem47ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem47ActionPerformed
-        
+
        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (((intNivelMnu > intNivelUsuario )|| ((ccosto_usr!=5) && (ccosto_usr!=6))) && (intNivelUsuario<80)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || ((ccosto_usr != 5) && (ccosto_usr != 6))) && (intNivelUsuario < 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------   
-        
+
         pfCCCotizaCliente cotizacli = new pfCCCotizaCliente();
         pnPestanas.addTab("Cotizacion Clientes", cotizacli);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(cotizacli), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_jMenuItem47ActionPerformed
 
     private void jMenuItem51ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem51ActionPerformed
-        
+
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 60;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------
-        
+
         pfBuscaDoc buscaDoc = new pfBuscaDoc();
-        pnPestanas.addTab("Buscar Documento",  buscaDoc);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        pnPestanas.addTab("Buscar Documento", buscaDoc);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(buscaDoc), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_jMenuItem51ActionPerformed
 
     private void jMenuItem55ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem55ActionPerformed
         // TODO add your handling code here:
-     
+
     //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if ((((intNivelMnu > intNivelUsuario ) && (!fmMain.UsuarioBodega ))     || (ccosto_usr!=7) ) && (intNivelUsuario<=80)  ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if ((((intNivelMnu > intNivelUsuario) && (!fmMain.UsuarioBodega)) || (ccosto_usr != 7)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------  
-        
+
         //if(GetUsuarioAdministrador() || GetUsuarioBodega() ){
-        AsignaUbicacion_Producto  AsUbica= new AsignaUbicacion_Producto();
-        pnPestanas.addTab("Ubicacion de Productos",  AsUbica);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        AsignaUbicacion_Producto AsUbica = new AsignaUbicacion_Producto();
+        pnPestanas.addTab("Ubicacion de Productos", AsUbica);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(AsUbica), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
         AsUbica.limpia_all();
         AsUbica.set_ubicacion(fmMain.BodegaTransito());
         AsUbica.enter_ubicacion();
@@ -1941,83 +1890,76 @@ public class fmMain extends javax.swing.JFrame {
 //        else{
 //            Mensaje("Usuario no autorizado");
 //        }
-        
+
     }//GEN-LAST:event_jMenuItem55ActionPerformed
 
     private void jMenuItem77ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem77ActionPerformed
-        pfIndicadoresInventario AsInd= new pfIndicadoresInventario();
-        pnPestanas.addTab("Indicadores de INVENTARIO.",  AsInd);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        pfIndicadoresInventario AsInd = new pfIndicadoresInventario();
+        pnPestanas.addTab("Indicadores de INVENTARIO.", AsInd);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(AsInd), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
         //AsInd.limpia_all();
     }//GEN-LAST:event_jMenuItem77ActionPerformed
 
     private void jMenuItem80ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem80ActionPerformed
         pfAutorizaNCC ncc = new pfAutorizaNCC();
         pnPestanas.addTab("Autoriza NCC", ncc);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(ncc), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
     }//GEN-LAST:event_jMenuItem80ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
-        
+
         ExeSql Sql = new ExeSql();
         ExeSql Sql2 = new ExeSql();
         ExeSql Sql3 = new ExeSql();
-        ResultSet Rs,Rs2;
-        
+        ResultSet Rs, Rs2;
+
         try {
-            
-            String Query = "SELECT sku, cantidad FROM ctacteprvdet\n" +
-                            "WHERE tipdocto IN ('NPP') AND nrodocto = 48";
-            
+
+            String Query = "SELECT sku, cantidad FROM ctacteprvdet\n"
+                    + "WHERE tipdocto IN ('NPP') AND nrodocto = 48";
+
             Rs = Sql.Select(Query);
-                        
-            if (Sql.GetRowCount() > 0){
-           
-                while (Rs.next()){
-                
+
+            if (Sql.GetRowCount() > 0) {
+
+                while (Rs.next()) {
+
                     String sku = Rs.getString("sku");
                     double cant = Rs.getDouble("cantidad");
-                    
-                    String Query2 = "select sku FROM inventario_sala \n" +
-                                    "WHERE sku ='"+sku.trim()+"'";
+
+                    String Query2 = "select sku FROM inventario_sala \n"
+                            + "WHERE sku ='" + sku.trim() + "'";
                     Rs2 = Sql2.Select(Query2);
-                    
-                    
-                    if (Sql2.GetRowCount() > 0){
-                    
-                    
-                        Sql3.ExeSql("UPDATE inventario_sala SET \n" +
-                                    "stock = 0, \n"+
-                                    "ocp = "+cant + " \n"+
-                                    "WHERE sku ='"+sku.trim()+"'");
-                    
+
+                    if (Sql2.GetRowCount() > 0) {
+
+                        Sql3.ExeSql("UPDATE inventario_sala SET \n"
+                                + "stock = 0, \n"
+                                + "ocp = " + cant + " \n"
+                                + "WHERE sku ='" + sku.trim() + "'");
+
                         Sql3.Commit();
-                   } 
+                    }
                 }
-          
-            
-                
-                
+
             }
-        
-        
-         } catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(fmMain.class.getName()).log(Level.SEVERE, null, ex);
             Sql3.Rollback();
-        }finally {
-        
+        } finally {
+
             Sql3.Close();
-        
-        } 
-       
+
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
- 
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         muestraDatos();
 
@@ -2028,86 +1970,79 @@ public class fmMain extends javax.swing.JFrame {
         ExeSql Sql = new ExeSql();
         ExeSql Sql2 = new ExeSql();
         ExeSql Sql3 = new ExeSql();
-        ResultSet Rs,Rs2;
-        
+        ResultSet Rs, Rs2;
+
         try {
-            
-            String Query = "SELECT ctp.sku, mt.cant FROM ctacteprvdet ctp\n" +
-                           "LEFT JOIN mt_productos mt ON ctp.sku = mt.sku\n" +
-                           "WHERE mt.ubicacion IN ('SAL.1001.1') AND ctp.tipdocto IN ('NPP') AND ctp.nrodocto = 48";
-            
+
+            String Query = "SELECT ctp.sku, mt.cant FROM ctacteprvdet ctp\n"
+                    + "LEFT JOIN mt_productos mt ON ctp.sku = mt.sku\n"
+                    + "WHERE mt.ubicacion IN ('SAL.1001.1') AND ctp.tipdocto IN ('NPP') AND ctp.nrodocto = 48";
+
             Rs = Sql.Select(Query);
-                        
-            if (Sql.GetRowCount() > 0){
-           
-                while (Rs.next()){
-                
+
+            if (Sql.GetRowCount() > 0) {
+
+                while (Rs.next()) {
+
                     String sku = Rs.getString("sku");
-                   
-                    Sql3.ExeSql("UPDATE mt_productos SET \n" +
-                                "cant = 0 "+
-                                "WHERE sku = '" + sku.trim() + "' AND ubicacion IN ('SAL.1001.1') ");
-                    
+
+                    Sql3.ExeSql("UPDATE mt_productos SET \n"
+                            + "cant = 0 "
+                            + "WHERE sku = '" + sku.trim() + "' AND ubicacion IN ('SAL.1001.1') ");
+
                     Sql3.Commit();
                 }
-          
+
             }
-        
-        
-         } catch (SQLException ex) {
+
+        } catch (SQLException ex) {
             Logger.getLogger(fmMain.class.getName()).log(Level.SEVERE, null, ex);
             Sql3.Rollback();
-        }finally {
-        
+        } finally {
+
             Sql3.Close();
-        
-        } 
-        
-        
-        
-        
+
+        }
+
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void MnReportePreciosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MnReportePreciosActionPerformed
-        
+
         //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (intNivelMnu > intNivelUsuario){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (intNivelMnu > intNivelUsuario) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------
-        
-        
-       
+
 //        if(GetUsuarioAdministrador()){
-            pfReportePrecio RepoPrecio = new pfReportePrecio();
-            pnPestanas.addTab("Reporte de Precios", RepoPrecio);
-            PanelTab btc=new PanelTab(pnPestanas,0);
-            pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(RepoPrecio), btc);
-            pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pfReportePrecio RepoPrecio = new pfReportePrecio();
+        pnPestanas.addTab("Reporte de Precios", RepoPrecio);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
+        pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(RepoPrecio), btc);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
 //        }    
 //        else{
 //            Mensaje("Usuario no autorizado");
 //        }
-        
-        
+
+
     }//GEN-LAST:event_MnReportePreciosActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
-       
-        
+
 //        ExeSql Sql = new ExeSql();
 //        ExeSql Sql2 = new ExeSql();
 //        ExeSql Sql3 = new ExeSql();
@@ -2158,210 +2093,196 @@ public class fmMain extends javax.swing.JFrame {
 //        
         int numero = 0;
         String folio = "";
-        
-        for (int i = 0;i< 5;i++){
-        
+
+        for (int i = 0; i < 5; i++) {
+
             numero = (int) (Math.random() * 9) + 1;
-            
+
             folio = folio + String.valueOf(numero);
-        
-        
+
         }
-        
-        System.out.println("EL Resultado ES :"+folio);
-        
-        
+
+        System.out.println("EL Resultado ES :" + folio);
+
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void mnFoliosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnFoliosActionPerformed
-        
+
           //--------------------------------------------------------------------------------------
             /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area    = 90
-             Supervisores  = 80
-             Normal        = 70
-             Normal Vtas   = 71
-             Visita        = 60
+         Administrador = 100
+         Admin Area    = 90
+         Supervisores  = 80
+         Normal        = 70
+         Normal Vtas   = 71
+         Visita        = 60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
-        
+         */
         intNivelMnu = 100;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if (((intNivelMnu > intNivelUsuario )|| (ccosto_usr!=4) ) && (intNivelUsuario<=80)){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if (((intNivelMnu > intNivelUsuario) || (ccosto_usr != 4)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------           
-        
-        
-        jdFolios Folios = new jdFolios(null,true);
+
+        jdFolios Folios = new jdFolios(null, true);
         Folios.setTitle("Folios");
         Folios.setLocationRelativeTo(null);
         Folios.setVisible(true);
-    
-        
-        
+
+
     }//GEN-LAST:event_mnFoliosActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       
+
         ExeSql Sql = new ExeSql();
         ExeSql Sql3 = new ExeSql();
         ResultSet Rs;
-        
+
         try {
-            
+
             String Query = "SELECT sku FROM inventario2 ";
-            
+
             Rs = Sql.Select(Query);
-                        
-            if (Sql.GetRowCount() > 0){
-           
-                while (Rs.next()){
-                
+
+            if (Sql.GetRowCount() > 0) {
+
+                while (Rs.next()) {
+
                     String sku = Rs.getString("sku");
-                    
-                        Sql3.ExeSql("INSERT INTO producto_valores (sku) \n" +
-                                    "VALUES ('"+sku.trim()+"')");
-                    
-                        Sql3.Commit();
-                    
+
+                    Sql3.ExeSql("INSERT INTO producto_valores (sku) \n"
+                            + "VALUES ('" + sku.trim() + "')");
+
+                    Sql3.Commit();
+
                 }
-                
+
             }
-        
-        
+
         } catch (SQLException ex) {
             Logger.getLogger(fmMain.class.getName()).log(Level.SEVERE, null, ex);
             Sql3.Rollback();
-        }finally {
-        
+        } finally {
+
             Sql3.Close();
-        
-        } 
-        
-        
+
+        }
+
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void ajustePrecioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ajustePrecioActionPerformed
 
-        pfAjustePrecio  AjustePrecio = new pfAjustePrecio();
+        pfAjustePrecio AjustePrecio = new pfAjustePrecio();
 
         pnPestanas.addTab("Reporte Ajuste Precios", AjustePrecio);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(AjustePrecio), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
 
     }//GEN-LAST:event_ajustePrecioActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        
+
            // TODO add your handling code here:
-     
     //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if ((((intNivelMnu > intNivelUsuario ) && (!fmMain.UsuarioBodega ))     || (ccosto_usr!=7) ) && (intNivelUsuario<=80)  ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if ((((intNivelMnu > intNivelUsuario) && (!fmMain.UsuarioBodega)) || (ccosto_usr != 7)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------  
-        
-      
-        Movimiento_Productos2  MueveProducto = new Movimiento_Productos2();
-        pnPestanas.addTab("Movimiento de Productos",  MueveProducto);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+
+        Movimiento_Productos2 MueveProducto = new Movimiento_Productos2();
+        pnPestanas.addTab("Movimiento de Productos", MueveProducto);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(MueveProducto), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
 //        MueveProducto.limpia_all();
 //        MueveProducto.set_ubicacion(fmMain.Rack1());
 //        MueveProducto.enter_ubicacion();
 
-        
-        
+
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        
+
             // TODO add your handling code here:
-     
     //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
-             Administrador = 100
-             Admin Area     = 90
-             Supervisores   = 80
-             Normal        =  70
-             Normal Vtas        =  71
-             Visita =         60
+         Administrador = 100
+         Admin Area     = 90
+         Supervisores   = 80
+         Normal        =  70
+         Normal Vtas        =  71
+         Visita =         60
          Cada menu del sistema tendra un valor de acuerdo al nivel que quiero que acceda.        
-         */    
+         */
         intNivelMnu = 70;
         intNivelUsuario = fmMain.trae_nivel(fmMain.GetUsuario());
-        if ((((intNivelMnu > intNivelUsuario ) && (!fmMain.UsuarioBodega ))     || (ccosto_usr!=7) ) && (intNivelUsuario<=80)  ){
-            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado") ;
-                    return;
+        if ((((intNivelMnu > intNivelUsuario) && (!fmMain.UsuarioBodega)) || (ccosto_usr != 7)) && (intNivelUsuario <= 80)) {
+            fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
+            return;
         }
     //--------------------------------------------------------------------------------------  
-        
+
         //if(GetUsuarioAdministrador() || GetUsuarioBodega() ){
-        pfNPP_Pendientes  Pendientes= new pfNPP_Pendientes();
-        pnPestanas.addTab("Notas Pendientres",  Pendientes);
-        PanelTab btc=new PanelTab(pnPestanas,0);
+        pfNPP_Pendientes Pendientes = new pfNPP_Pendientes();
+        pnPestanas.addTab("Notas Pendientres", Pendientes);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
         pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(Pendientes), btc);
-        pnPestanas.setSelectedIndex(pnPestanas.getTabCount()-1);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
         Pendientes.limpia_all();
         Pendientes.set_ubicacion(fmMain.BodegaTransito());
-        Pendientes.enter_ubicacion(); 
+        Pendientes.enter_ubicacion();
 //        }
 //        else{
 //            Mensaje("Usuario no autorizado");
 //        }
-        
-        
+
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
-    
-    public static String FormatoNumero3(double Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+    public static String FormatoNumero3(double Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("#0.00",simbolo);
+        DecimalFormat formateador = new DecimalFormat("#0.00", simbolo);
         return formateador.format(Numero);
     }
-    
-    public static String FormatoTotal3(double Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+
+    public static String FormatoTotal3(double Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("#",simbolo);
+        DecimalFormat formateador = new DecimalFormat("#", simbolo);
         return formateador.format(Numero);
     }
-    
-    public static String FormatoNumero4(double Numero){
-        DecimalFormatSymbols simbolo=new DecimalFormatSymbols();
+
+    public static String FormatoNumero4(double Numero) {
+        DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
         simbolo.setDecimalSeparator('.');
         simbolo.setGroupingSeparator(',');
-        DecimalFormat formateador = new DecimalFormat("#0.00000",simbolo);
+        DecimalFormat formateador = new DecimalFormat("#0.00000", simbolo);
         return formateador.format(Numero);
-}
-    
-    
-    
-    
-    
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -2393,7 +2314,7 @@ public class fmMain extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new fmMain().setVisible(true);
-                    
+
             }
         });
     }

@@ -16,7 +16,7 @@ public class Conector {
     private final boolean Internet =fmMain.GetInternet();
     private static String SistemaActual;    
 //    //PRODUCCION//
-    private final String dbPath = "jdbc:postgresql://192.168.0.150:5432/luvaly_final"; 
+    private final String dbPath = "jdbc:postgresql://192.168.0.150:5432/luvaly_des"; 
     private final String dbPathInternet = "jdbc:postgresql://179.57.172.101:10001/luvaly_final";
     private final String user   = fmMain.GetUsuario().toLowerCase();
     private final String pass   = fmMain.GetPass();

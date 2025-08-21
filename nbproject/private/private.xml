@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/Formularios/fmMain.java</file>
-            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/Conexion/Conector.java</file>
-            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/Conexion/ConectorLuvaly.java</file>
-            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/PanelForm/pfControlStock.java</file>
+            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/META-INF/persistence.xml</file>
+            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/Entidades/Persona.java</file>
+            <file>file:/C:/Users/Roberto/Desktop/SALA_ERP/src/Dialogos/jdLogin.java</file>
         </group>
     </open-files>
 </project-private>
