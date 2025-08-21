@@ -1,0 +1,49 @@
+[2021-10-21][11:39:26][pfControlStock] ERROR: error de sintaxis en o cerca de «from»
+  Position: 205
+[2021-10-21][11:49:23][pfControlStock] The column name proveedor was not found in this ResultSet.
+[2021-10-21][11:50:09][pfControlStock] The column name minimo was not found in this ResultSet.
+[2021-10-21][12:47:54][pfControlStock] ERROR: falta una entrada para la tabla «n» en la cláusula FROM
+  Position: 247
+[2021-10-21][12:48:05][pfControlStock] ERROR: falta una entrada para la tabla «n» en la cláusula FROM
+  Position: 247
+[2021-10-21][15:49:56][pfControlStock] ERROR: falta una entrada para la tabla «o» en la cláusula FROM
+  Position: 197
+[2021-12-03][11:45:00][pfOCProveedor] null
+[2021-12-03][11:46:56][pfOCProveedor] null
+[2021-12-03][11:50:21][pfOCProveedor] null
+[2021-12-03][11:54:18][pfOCProveedor] null
+[2021-12-03][12:05:30][pfOCProveedor] null
+[2021-12-03][12:06:24][pfOCProveedor] null
+[2021-12-03][12:44:07][pfOCProveedor] null
+[2021-12-03][12:46:44][pfOCProveedor] null
+[2021-12-03][12:49:39][pfOCProveedor] null
+[2021-12-03][12:53:31][pfOCProveedor] null
+[2021-12-23][08:59:34][pfControlStock] ResultSet not positioned properly, perhaps you need to call next.
+[2022-01-31][13:43:30][pfOCProveedor] null
+[2022-01-31][13:43:55][pfOCProveedor] null
+[2022-02-02][14:58:59][pfOCProveedor] null
+[2022-03-04][14:53:47][pfOCProveedor] null
+[2022-03-16][10:52:54][pfControlStock] ERROR: no existe la relación «inventario_sala»
+  Position: 123
+[2022-03-16][10:53:31][pfControlStock] ERROR: no existe la relación «inventario_sala»
+  Position: 123
+[2022-03-16][10:55:03][pfControlStock] ERROR: no existe la relación «inventario_sala»
+  Position: 123
+[2022-03-16][17:25:20][pfNPProveedor] null
+[2025-06-04][10:36:50][pfControlStock] ERROR: no existe la columna p.um
+  Position: 24
+[2025-06-04][10:49:03][pfControlStock] The column name minimo was not found in this ResultSet.
+[2025-06-04][10:50:15][pfControlStock] ERROR: error de sintaxis en o cerca de «(»
+  Position: 93
+[2025-06-04][10:52:23][pfControlStock] The column name ocp was not found in this ResultSet.
+[2025-06-04][10:54:03][pfControlStock] The column name total was not found in this ResultSet.
+[2025-06-04][11:00:38][pfControlStock] ERROR: error de sintaxis en o cerca de «stock»
+  Position: 224
+[2025-06-04][11:01:32][pfControlStock] ERROR: error de sintaxis en o cerca de «as»
+  Position: 413
+[2025-06-04][11:03:43][pfControlStock] ERROR: error de sintaxis en o cerca de «as»
+  Position: 413
+[2025-06-04][11:27:12][pfControlStock] ERROR: cancelando la sentencia debido a que se agotó el tiempo de espera de sentencias
+[2025-06-04][12:03:22][pfControlStock] ERROR: cancelando la sentencia debido a que se agotó el tiempo de espera de sentencias
+[2025-06-04][12:17:53][pfControlStock] ERROR: error de sintaxis en o cerca de «from»
+  Position: 96
