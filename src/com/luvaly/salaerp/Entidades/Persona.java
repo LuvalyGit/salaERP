@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Entidades;
+package com.luvaly.salaerp.Entidades;
 
 import java.sql.Timestamp;
 import javax.persistence.*;
@@ -14,6 +14,9 @@ import javax.persistence.*;
  */
 @Entity //Marca clase como entidad en JPA
 @Table(name = "persona") //Nombre de la tabla en la base de datos
+
+//QUERY
+@NamedQuery(name = "Persona.listar",  query = "SELECT p FROM Persona p")
 public class Persona {
 
     @Id
