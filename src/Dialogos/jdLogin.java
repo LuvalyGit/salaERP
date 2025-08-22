@@ -33,6 +33,7 @@ public class jdLogin extends javax.swing.JDialog {
     private static final EntityManagerFactory emf;
 
     static {
+        System.out.println(javax.persistence.Table.class.getProtectionDomain().getCodeSource().getLocation());
         emf = Persistence.createEntityManagerFactory("MiPU"); // nombre de tu persistence-unit
     }
 
@@ -50,7 +51,7 @@ public class jdLogin extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         chbInternet.setVisible(false);
-     //   chbInternet.setSelected(true);
+        //   chbInternet.setSelected(true);
 
     }
 
