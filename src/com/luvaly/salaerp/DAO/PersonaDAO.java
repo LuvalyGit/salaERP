@@ -10,7 +10,7 @@ import com.luvaly.salaerp.Entidades.Persona;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
+import javax.persistence.Query;
 
 /**
  *
@@ -94,8 +94,10 @@ public class PersonaDAO {
     public List<Persona> listar() {
         EntityManager em = JpaUtil.getEntityManager();
         try {
-            TypedQuery<Persona> query = em.createNamedQuery("Persona.listar", Persona.class);
-            return query.getResultList();
+            Query query = em.createNamedQuery("Persona.listar");
+            @SuppressWarnings("unchecked")
+            List<Persona> personas = (List<Persona>) query.getResultList();
+            return personas;
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
