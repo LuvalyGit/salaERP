@@ -34,7 +34,7 @@ public class jdLogin extends javax.swing.JDialog {
 
     static {
         System.out.println(javax.persistence.Table.class.getProtectionDomain().getCodeSource().getLocation());
-        emf = Persistence.createEntityManagerFactory("MiPU"); // nombre de tu persistence-unit
+        emf = Persistence.createEntityManagerFactory("salaerp"); // nombre de tu persistence-unit
     }
 
     public static EntityManager getEntityManager() {

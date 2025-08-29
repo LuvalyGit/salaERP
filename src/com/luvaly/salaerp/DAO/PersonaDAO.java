@@ -21,8 +21,8 @@ public class PersonaDAO {
     public void create(Persona persona) {
         //CREATE
         EntityManager em = JpaUtil.getEntityManager();
-
         try {
+
             em.getTransaction().begin();
             em.persist(persona);
             em.getTransaction().commit();

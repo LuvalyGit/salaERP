@@ -28,6 +28,7 @@ import PanelForm.pfReportePrecio;
 import PanelForm.pfReportesMargen;
 import PanelForm.pfUsuarios;
 import Utilidades.PanelTab;
+import com.luvaly.salaerp.NotaDePedido.pfPersona;
 import java.awt.Color;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
@@ -218,6 +219,9 @@ public class fmMain extends javax.swing.JFrame {
         jMenuItem55 = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem77 = new javax.swing.JMenuItem();
+        jMenu7NotaPedido = new javax.swing.JMenu();
+        jMenuItemNotaPedido = new javax.swing.JMenuItem();
+        jSeparator8 = new javax.swing.JPopupMenu.Separator();
 
         jMenuItem8.setText("jMenuItem8");
 
@@ -749,6 +753,19 @@ public class fmMain extends javax.swing.JFrame {
 
         jMenuBar1.add(Control);
 
+        jMenu7NotaPedido.setText("Nota de Pedido");
+
+        jMenuItemNotaPedido.setText("Abrir Nota de Pedido");
+        jMenuItemNotaPedido.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemNotaPedidoActionPerformed(evt);
+            }
+        });
+        jMenu7NotaPedido.add(jMenuItemNotaPedido);
+        jMenu7NotaPedido.add(jSeparator8);
+
+        jMenuBar1.add(jMenu7NotaPedido);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -775,7 +792,7 @@ public class fmMain extends javax.swing.JFrame {
     }
 
     public void buscaFactura() {
-             //BUSCA CANTIDAD FACTURAS
+        //BUSCA CANTIDAD FACTURAS
 
         ExeSql Sql = new ExeSql();
         ResultSet Rs;
@@ -805,7 +822,7 @@ public class fmMain extends javax.swing.JFrame {
     }
 
     public void buscaNotaDebito() {
-     //BUSCA CANTIDAD NOTAS DE CREDITO
+        //BUSCA CANTIDAD NOTAS DE CREDITO
 
         ExeSql SqlNDC = new ExeSql();
         ResultSet RsNDC;
@@ -835,7 +852,7 @@ public class fmMain extends javax.swing.JFrame {
     }
 
     public void buscaFacturaExentaCliente() {
-    //BUSCA CANTIDAD FACTURA EXENTA CLIENTE
+        //BUSCA CANTIDAD FACTURA EXENTA CLIENTE
 
         ExeSql SqlFEC = new ExeSql();
         ResultSet RsFEC;
@@ -865,7 +882,7 @@ public class fmMain extends javax.swing.JFrame {
     }
 
     public void buscaGuiaDespachoCliente() {
-  //BUSCA CANTIDAD GUIA DESPACHO CLIENTE
+        //BUSCA CANTIDAD GUIA DESPACHO CLIENTE
 
         ExeSql SqlGDC = new ExeSql();
         ResultSet RsGDC;
@@ -895,7 +912,7 @@ public class fmMain extends javax.swing.JFrame {
     }
 
     public void buscaNotaCreditoCliente() {
-      //BUSCA CANTIDAD NOTA DE CREDITO CLIENTE
+        //BUSCA CANTIDAD NOTA DE CREDITO CLIENTE
 
         ExeSql SqlNCC = new ExeSql();
         ResultSet RsNCC;
@@ -1395,7 +1412,7 @@ public class fmMain extends javax.swing.JFrame {
 //-----------------------------------------------------------------------------
     private void AbrirClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AbrirClienteActionPerformed
 
-      //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1412,7 +1429,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------   
+        //--------------------------------------------------------------------------------------   
 
         pfClientes Cli = new pfClientes();
 //        Cli.setOpaque(false);
@@ -1441,7 +1458,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------        
+        //--------------------------------------------------------------------------------------        
 
         pfProveedores Prv = new pfProveedores();
 //        Prv.setOpaque(false);
@@ -1453,7 +1470,7 @@ public class fmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_AbrirProveedorActionPerformed
 
     private void BuscarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarClienteActionPerformed
-      //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1471,7 +1488,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------        
+        //--------------------------------------------------------------------------------------        
 
         jdBuscarCliPrv BPC = new jdBuscarCliPrv(this, true);
         BPC.setLocationRelativeTo(null);
@@ -1485,7 +1502,7 @@ public class fmMain extends javax.swing.JFrame {
 
     private void OCPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OCPActionPerformed
 
-          //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1502,7 +1519,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------        
+        //--------------------------------------------------------------------------------------        
 
         pfNPProveedor PrvNP = new pfNPProveedor();
 //        PrvOC.setOpaque(false);
@@ -1514,7 +1531,7 @@ public class fmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_OCPActionPerformed
 
     private void mnuControlInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuControlInventarioActionPerformed
-   //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1533,7 +1550,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------        
+        //--------------------------------------------------------------------------------------        
 
         pfControlStock ControlStock = new pfControlStock();
         pnPestanas.addTab("Control de Stock", ControlStock);
@@ -1563,7 +1580,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------           
+        //--------------------------------------------------------------------------------------           
 
         pfUsuarios Usuarios = new pfUsuarios();
 //        Usuarios.setOpaque(false);
@@ -1574,7 +1591,7 @@ public class fmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_mnuUsuariosActionPerformed
 
     private void ReporteOCPActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReporteOCPActionPerformed
-          //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1633,7 +1650,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------           
+        //--------------------------------------------------------------------------------------           
 
 //if(GetUsuarioAdministrador()){
         pfAdminParametros Admin = new pfAdminParametros();
@@ -1650,7 +1667,7 @@ public class fmMain extends javax.swing.JFrame {
 
     private void AjustedeStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjustedeStockActionPerformed
 
-	//--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1668,7 +1685,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------   
+        //--------------------------------------------------------------------------------------   
 
         pfAjusteStock AJU = new pfAjusteStock();
         //            AJU.setOpaque(false);
@@ -1696,7 +1713,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
 
         pfProductos Pro = new pfProductos();
         pnPestanas.addTab("Ficha Producto", Pro);
@@ -1725,7 +1742,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
 
         pfNCCCliente NCC = new pfNCCCliente();
         //        NCC.setOpaque(false);
@@ -1770,7 +1787,7 @@ public class fmMain extends javax.swing.JFrame {
 
     private void jMenuItem41ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem41ActionPerformed
 
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1786,7 +1803,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
 
 //        if(GetUsuarioAdministrador()){
         pfReportesMargen RepoMargen = new pfReportesMargen();
@@ -1802,7 +1819,7 @@ public class fmMain extends javax.swing.JFrame {
 
     private void jMenuItem47ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem47ActionPerformed
 
-       //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -1819,7 +1836,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------   
+        //--------------------------------------------------------------------------------------   
 
         pfCCCotizaCliente cotizacli = new pfCCCotizaCliente();
         pnPestanas.addTab("Cotizacion Clientes", cotizacli);
@@ -1846,7 +1863,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
 
         pfBuscaDoc buscaDoc = new pfBuscaDoc();
         pnPestanas.addTab("Buscar Documento", buscaDoc);
@@ -1858,7 +1875,7 @@ public class fmMain extends javax.swing.JFrame {
     private void jMenuItem55ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem55ActionPerformed
         // TODO add your handling code here:
 
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -2025,7 +2042,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
 
 //        if(GetUsuarioAdministrador()){
         pfReportePrecio RepoPrecio = new pfReportePrecio();
@@ -2109,7 +2126,7 @@ public class fmMain extends javax.swing.JFrame {
 
     private void mnFoliosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnFoliosActionPerformed
 
-          //--------------------------------------------------------------------------------------
+        //--------------------------------------------------------------------------------------
             /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -2126,7 +2143,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------           
+        //--------------------------------------------------------------------------------------           
 
         jdFolios Folios = new jdFolios(null, true);
         Folios.setTitle("Folios");
@@ -2188,8 +2205,8 @@ public class fmMain extends javax.swing.JFrame {
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
 
-           // TODO add your handling code here:
-    //--------------------------------------------------------------------------------------
+        // TODO add your handling code here:
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -2206,7 +2223,7 @@ public class fmMain extends javax.swing.JFrame {
             fmMain.Mensaje("Usuario: " + fmMain.GetUsuario() + " no esta autorizado");
             return;
         }
-    //--------------------------------------------------------------------------------------  
+        //--------------------------------------------------------------------------------------  
 
         Movimiento_Productos2 MueveProducto = new Movimiento_Productos2();
         pnPestanas.addTab("Movimiento de Productos", MueveProducto);
@@ -2222,8 +2239,8 @@ public class fmMain extends javax.swing.JFrame {
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
 
-            // TODO add your handling code here:
-    //--------------------------------------------------------------------------------------
+        // TODO add your handling code here:
+        //--------------------------------------------------------------------------------------
         /*     
          Valida el nivel de usuario 
          Administrador = 100
@@ -2258,6 +2275,14 @@ public class fmMain extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jMenuItemNotaPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemNotaPedidoActionPerformed
+        pfPersona persona = new pfPersona();
+        pnPestanas.addTab("Movimiento de Productos", persona);
+        PanelTab btc = new PanelTab(pnPestanas, 0);
+        pnPestanas.setTabComponentAt(pnPestanas.indexOfComponent(persona), btc);
+        pnPestanas.setSelectedIndex(pnPestanas.getTabCount() - 1);
+    }//GEN-LAST:event_jMenuItemNotaPedidoActionPerformed
 
     public static String FormatoNumero3(double Numero) {
         DecimalFormatSymbols simbolo = new DecimalFormatSymbols();
@@ -2350,6 +2375,7 @@ public class fmMain extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7NotaPedido;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem19;
@@ -2372,6 +2398,7 @@ public class fmMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem77;
     private javax.swing.JMenuItem jMenuItem8;
     private javax.swing.JMenuItem jMenuItem80;
+    private javax.swing.JMenuItem jMenuItemNotaPedido;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2384,6 +2411,7 @@ public class fmMain extends javax.swing.JFrame {
     private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JPopupMenu.Separator jSeparator3;
     private javax.swing.JPopupMenu.Separator jSeparator7;
+    private javax.swing.JPopupMenu.Separator jSeparator8;
     private javax.swing.JLabel lbFAC2;
     private javax.swing.JLabel lbFEC2;
     private javax.swing.JLabel lbGDC2;

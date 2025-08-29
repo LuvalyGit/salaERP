@@ -18,7 +18,7 @@ public class JpaUtil {
     private static final EntityManagerFactory emf;
 
     static {
-        emf = Persistence.createEntityManagerFactory("MiPU"); // nombre en persistence.xml
+        emf = Persistence.createEntityManagerFactory("salaerp"); // nombre en persistence.xml
     }
 
     public static EntityManager getEntityManager() {

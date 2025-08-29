@@ -6,6 +6,8 @@
 package com.luvaly.salaerp.Entidades;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.*;
 
 /**
@@ -16,7 +18,7 @@ import javax.persistence.*;
 @Table(name = "persona") //Nombre de la tabla en la base de datos
 
 //QUERY
-@NamedQuery(name = "Persona.listar",  query = "SELECT p FROM Persona p")
+@NamedQuery(name = "Persona.listar", query = "SELECT p FROM Persona p")
 public class Persona {
 
     @Id
@@ -31,6 +33,9 @@ public class Persona {
 
     @Column(name = "rut", nullable = false)
     private String rut;
+
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL)
+    private List<Hijo> hijos = new ArrayList<>();
 
     /**
      * @return the id
@@ -87,4 +92,13 @@ public class Persona {
     public void setRut(String rut) {
         this.rut = rut;
     }
+
+    public List<Hijo> getHijos() {
+        return hijos;
+    }
+
+    public void setHijos(List<Hijo> hijos) {
+        this.hijos = hijos;
+    }
+
 }

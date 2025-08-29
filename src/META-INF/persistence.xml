@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence version="2.2" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence                                  http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <persistence-unit name="MiPU">
-        <!-- Aquí registras todas tus entidades -->
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="salaerp" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.luvaly.salaerp.Entidades.Persona</class>
+
+        <!-- Entidades -->
+        <class>com.luvaly.salaerp.Entidades.NotaDePedido</class>
+        <class>com.luvaly.salaerp.Entidades.TipoDocumentoRelacionado</class>
+
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://192.168.0.150:5432/luvaly_des"/>
             <property name="javax.persistence.jdbc.user" value="alopez"/>
-            <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.password" value="78963"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>
 </persistence>
